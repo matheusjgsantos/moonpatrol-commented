@@ -12,9 +12,9 @@ z80dasm -a -l -g 0x8000 -o moonpatrol-cv.asm moonpatrol.rom
  Next, the resulting ASM file was uploaded to the [8bitworkshop IDE](http://8bitworkshop.com) and executed sucessfully, but the emulator doesn't accept the number keys to start the game. Changing the relative jump at 9c3f from `z` to `nz` skips the start screen and goes straight to the game:
 
  ```
-< 	jr nz,l9c56h	;9c3f
+< 	jr z,l9c56h	 ;9c3f
 ---
-> 	jr z,l9c56h		;9c3f
+> 	jr nz,l9c56h ;9c3f
  ```
 
 
