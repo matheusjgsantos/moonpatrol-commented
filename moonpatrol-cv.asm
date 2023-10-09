@@ -3,27 +3,27 @@
 
 	org	08000h
 
-	ld d,l			;8000
-	xor d			;8001
-	nop			;8002
-	nop			;8003
-	nop			;8004
-	nop			;8005
-	nop			;8006
-	nop			;8007
-	nop			;8008
-	nop			;8009
-	ld b,d			;800a
-	add a,b			;800b
-	jp 0a0dfh		;800c
+	ld d,l			;8000 - CARTRIDGE: Cartridge header (55AA or AA55)
+	xor d			;8001 - ''
+	nop			;8002 - LOCAL_SPR_TABLE: Pointer to RAM copy of the sprite name table.
+	nop			;8003 - ''
+	nop			;8004 - SPRITE_ORDER: Pointer to RAM sprite order table
+	nop			;8005 - ''
+	nop			;8006 - WORK_BUFFER: Pointer to free buffer space in RAM.
+	nop			;8007 - ''
+	nop			;8008 - CONTROLLER_MAP: Pointer to controller memory map.
+	nop			;8009 - ''
+	ld b,d			;800a - START_GAME: Pointer to the start of the game.
+	add a,b			;800b - '' The game code starts at the address 8042
+	jp 0a0dfh		;800c - RST_8H_RAM: Restart 8h soft vector.
 sub_800fh:
-	jp la100h		;800f
-	jp la0b2h		;8012
-	jp la187h		;8015
-	jp la833h		;8018
-	jp la61ch		;801b
-	jp lab8eh		;801e
-	jp 0ab51h		;8021
+	jp la100h		;800f - RST_10H_RAM: Restart 10h soft vector.
+	jp la0b2h		;8012 - RST_18H_RAM: Restart 18h soft vector.
+	jp la187h		;8015 - RST_20H_RAM: Restart 20h soft vector.
+	jp la833h		;8018 - RST_28H_RAM: Restart 28h soft vector.
+	jp la61ch		;801b - RST_30H_RAM: Restart 30h soft vector.
+	jp lab8eh		;801e - IRQ_INT_VECTOR: Maskable interrupt soft vector (38h).
+	jp 0ab51h		;8021 - NMI_INT_VECTOR: Non maskable interrupt (NMI) soft vector.
 	ld d,b			;8024
 l8025h:
 	ld d,d			;8025
@@ -591,7 +591,7 @@ sub_8416h:
 	ld hl,07dc1h		;8451
 	ld (07dbfh),hl		;8454
 l8457h:
-	ini		;8457
+	ini			;8457
 	nop			;8459
 	jr nz,l8457h		;845a
 	pop hl			;845c
@@ -604,12 +604,12 @@ l8462h:
 	push bc			;8466
 	ld b,005h		;8467
 l8469h:
-	out (0beh),a		;8469
-	add a,003h		;846b
-	djnz l8469h		;846d
-	sub 00eh		;846f
-	add hl,de			;8471
-	pop bc			;8472
+	out (0beh),a		;8469 - Send A to the VDP Data Port
+	add a,003h		;846b - Add 003h to A
+	djnz l8469h		;846d - Jumps to l8469h is B != 0
+	sub 00eh		;846f - Substract 00eh from A 
+	add hl,de		;8471 - Add DE to HL
+	pop bc			;8472 - Fetch data from the stack into BC
 	djnz l8462h		;8473
 	ld hl,l89a1h		;8475
 	ld a,(ix+000h)		;8478
@@ -4830,7 +4830,7 @@ sub_9c35h:
 	ld a,(07d95h)		;9c38
 	and 00fh		;9c3b
 	cp 002h		;9c3d
-	jr nz,l9c56h		;9c3f
+	jr z,l9c56h		;9c3f - Change to nz to start the game automatically
 	cp 008h		;9c41
 	jr z,l9c5ch		;9c43
 	cp 003h		;9c45
