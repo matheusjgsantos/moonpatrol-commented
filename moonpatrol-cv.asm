@@ -24,33 +24,33 @@ sub_800fh:
 	jp la61ch		;801b - RST_30H_RAM: Restart 30h soft vector.
 	jp lab8eh		;801e - IRQ_INT_VECTOR: Maskable interrupt soft vector (38h).
 	jp 0ab51h		;8021 - NMI_INT_VECTOR: Non maskable interrupt (NMI) soft vector.
-	ld d,b			;8024
+	ld d,b			;8024 - Start of the game name string: P
 l8025h:
-	ld d,d			;8025
-	ld c,a			;8026
-	ld b,a			;8027
-	ld d,d			;8028
-	ld b,c			;8029
-	ld c,l			;802a
-	ld c,l			;802b
-	ld b,l			;802c
-	ld b,h			;802d
-	jr nz,l8072h		;802e
-	ld e,c			;8030
-	jr nz,$+79		;8031
-	ld b,c			;8033
-	ld d,h			;8034
-	ld d,h			;8035
-	jr nz,$+74		;8036
-	ld c,a			;8038
-	ld d,l			;8039
-	ld d,e			;803a
-	ld b,l			;803b
-	ld c,b			;803c
-	ld c,a			;803d
-	ld c,h			;803e
-	ld b,h			;803f
-	ld b,l			;8040
+	ld d,d			;8025 - R
+	ld c,a			;8026 - O
+	ld b,a			;8027 - G
+	ld d,d			;8028 - R
+	ld b,c			;8029 - A
+	ld c,l			;802a - M
+	ld c,l			;802b - M
+	ld b,l			;802c - E
+	ld b,h			;802d - D
+	jr nz,l8072h		;802e - B
+	ld e,c			;8030 - Y
+	jr nz,$+79		;8031 - M
+	ld b,c			;8033 - A
+	ld d,h			;8034 - T
+	ld d,h			;8035 - T
+	jr nz,$+74		;8036 - H
+	ld c,a			;8038 - O
+	ld d,l			;8039 - U
+	ld d,e			;803a - S
+	ld b,l			;803b - E
+	ld c,b			;803c - H
+	ld c,a			;803d - O
+	ld c,h			;803e - L
+	ld b,h			;803f - D
+	ld b,l			;8040 - E
 	jp nc,0bfdbh		;8041
 	ld sp,07fffh		;8044
 	call sub_9f98h		;8047
