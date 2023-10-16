@@ -3,19 +3,19 @@
 
 	org	08000h
 
-	ld d,l			;8000 - CARTRIDGE: Cartridge header (55AA or AA55)
-	xor d			;8001 - ''
-	nop			;8002 - LOCAL_SPR_TABLE: Pointer to RAM copy of the sprite name table.
-	nop			;8003 - ''
-	nop			;8004 - SPRITE_ORDER: Pointer to RAM sprite order table
-	nop			;8005 - ''
-	nop			;8006 - WORK_BUFFER: Pointer to free buffer space in RAM.
-	nop			;8007 - ''
-	nop			;8008 - CONTROLLER_MAP: Pointer to controller memory map.
-	nop			;8009 - ''
-	ld b,d			;800a - START_GAME: Pointer to the start of the game.
-	add a,b			;800b - '' The game code starts at the address 8042
-	jp 0a0dfh		;800c - RST_8H_RAM: Restart 8h soft vector.
+	db 055h			;8000 - CARTRIDGE: Cartridge header (55AA or AA55)
+	db 0aah			;8001 - ''
+	db 0h			;8002 - LOCAL_SPR_TABLE: Pointer to RAM copy of the sprite name table.
+	db 0h			;8003 - ''
+	db 0h			;8004 - SPRITE_ORDER: Pointer to RAM sprite order table
+	db 0h			;8005 - ''
+	db 0h			;8006 - WORK_BUFFER: Pointer to free buffer space in RAM.
+	db 0h			;8007 - ''
+	db 0h			;8008 - CONTROLLER_MAP: Pointer to controller memory map.
+	db 0h			;8009 - ''
+	db 042h			;800a - START_GAME: Pointer to the start of the game.
+	db 080h			;800b - '' The game code starts at the address 8042
+	jp 0a0dfh 		;800c - RST_8H_RAM: Restart 8h soft vector.
 sub_800fh:
 	jp la100h		;800f - RST_10H_RAM: Restart 10h soft vector.
 	jp la0b2h		;8012 - RST_18H_RAM: Restart 18h soft vector.
@@ -24,36 +24,41 @@ sub_800fh:
 	jp la61ch		;801b - RST_30H_RAM: Restart 30h soft vector.
 	jp lab8eh		;801e - IRQ_INT_VECTOR: Maskable interrupt soft vector (38h).
 	jp 0ab51h		;8021 - NMI_INT_VECTOR: Non maskable interrupt (NMI) soft vector.
-	ld d,b			;8024 - Start of the game name string: P
-l8025h:
-	ld d,d			;8025 - R
-	ld c,a			;8026 - O
-	ld b,a			;8027 - G
-	ld d,d			;8028 - R
-	ld b,c			;8029 - A
-	ld c,l			;802a - M
-	ld c,l			;802b - M
-	ld b,l			;802c - E
-	ld b,h			;802d - D
-	jr nz,l8072h		;802e - B
-	ld e,c			;8030 - Y
-	jr nz,$+79		;8031 - M
-	ld b,c			;8033 - A
-	ld d,h			;8034 - T
-	ld d,h			;8035 - T
-	jr nz,$+74		;8036 - H
-	ld c,a			;8038 - O
-	ld d,l			;8039 - U
-	ld d,e			;803a - S
-	ld b,l			;803b - E
-	ld c,b			;803c - H
-	ld c,a			;803d - O
-	ld c,h			;803e - L
-	ld b,h			;803f - D
-	ld b,l			;8040 - E
-	jp nc,0bfdbh		;8041
-	ld sp,07fffh		;8044
-	call sub_9f98h		;8047
+	db 050H			;8024 - Start of the game name string: P
+l8025h:        
+	db 052H			;8025 - R
+	db 04FH			;8026 - O
+	db 047H			;8027 - G
+	db 052H			;8028 - R
+	db 041H			;8029 - A
+	db 04DH			;802a - M
+	db 04DH			;802b - M
+	db 045H			;802c - E
+	db 044H			;802d - D
+	db 020H			;802e - 
+	db 042H			;802f - B
+	db 059H			;8030 - Y
+	db 020H			;8031 - 
+	db 04DH			;8032 - M
+	db 041H			;8033 - A
+	db 054H			;8034 - T
+	db 054H			;8035 - T
+	db 020H			;8036 - 
+	db 048H			;8037 - H
+	db 04FH			;8038 - O
+	db 055H			;8039 - U
+	db 053H			;803a - S
+	db 045H			;803b - E
+	db 048H			;803c - H
+	db 04FH			;803d - O
+	db 04CH			;803e - L
+	db 044H			;804f - D
+	db 045H			;8040 - E
+	db 0D2H			;8041 - .
+	in A,(0BFH)         ;8042 - Start of the game code as loaded from ($800A)
+						;     - Reads VDP register port (0bfh) into A
+	ld sp, 07fffh       ;8044 - Set the top of the stack to 07fffh
+	call sub_9f98h		;8047 - 
 	call sub_aafeh		;804a
 	call sub_9bd9h		;804d
 	jr l8056h		;8050
